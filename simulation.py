@@ -1,12 +1,17 @@
 """
 Henry Manley - hjm67@cornell.edu
+
+Simulates imperfect treatment effects created by node connectedness. Given an
+undirected graph G = {V,E}, what can we learn about the underlying network from
+sampling?
 """
+
 import matplotlib.pyplot as plt
 import networkx as nx
 import pandas as pd
 import random
 
-def randomGraph(n, s, c):
+def randomGraph(n: int, s: int, c: int):
     """
     Returns s complete graphs connected by c edges. This simulation models
     imperfect treatment across samples (particularly when s = 2).
@@ -39,8 +44,7 @@ def randomGraph(n, s, c):
     return G
 
 
-
-def sample(G, n):
+def sample(G, n: int):
     """
     Return the reverse-engineered graph G1. G1 is created by sampling n nodes
     from graph G, which is the collection of complete graphs each connected by some
@@ -70,8 +74,39 @@ def drawGraph(G):
     plt.show()
 
 
+def simulate(S: int, N: int, C: int, K: int, iterations = 10):
+    """
+    Simulate the probability of having properly estimated a regression
+    treatment estimate given a graph G. Returns a pandas df of
+
+    @param N is range of nodes in G to generate
+    @param S is range of samples to generate
+    @param C is range of connections to generate
+    @param K is the number of nodes to sample from G
+    @param iterations is the number of bootstraps to perform for each permutation
+    of each N, S, C, and K.
+    """
+    assert N%10 == 0
+    print(N)
+    data = pd.DataFrame(columns = ["N", "S", "C", "K", "Bias"])
+    for s in range(2, S + 1):
+        for c in range(1, C + 1):
+            for n in range(10, N + 10, 10):
+                G = randomGraph(n, s, c)
+                for k in range(1, K + 1):
+                    for i in range(1, iterations + 1):
+                        paramGraph = sample(G, k)
+                        bias = not nx.is_connected(paramGraph)
+                        row = {"N": n, "S": s, "C": c, "K": k, "Bias": bias}
+                        data = data.append(row, ignore_index = True)
+    return data
+
 
 if __name__ == "__main__":
-    g = randomGraph(10, 2, 3)
-    g1 = sample(g, 5)
-    drawGraph(g1)
+    # drawGraph(g1)
+    d = simulate(S = 2, N = 100, C = 5, K = 10)
+    print(d)
+    print(d.head(20))
+
+    df = d.groupby(['N', 'S', 'C', 'K'])['Bias'].sum().reset_index()
+    print(df.head(20))
