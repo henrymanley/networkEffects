@@ -9,13 +9,13 @@ real world. As a brute-force solution to the notion of "connected" networks of p
 of students across treatment and control schools, a distance-based penalty is introduced
 to the OLS framework.
 
-Since, many studies, particularly in the space of developmental economics [(Banerjee, Chandrasekhar, Duflo, and Jackson)](https://economics.mit.edu/files/9070), [(Chandrasekhar and Lewis 2019)](http://stanford.edu/~arungc/CL.pdf), [(Hardy et. al)](https://arxiv.org/pdf/1904.00136.pdf) have been aimed at addressing this network dilemma in a more methodological fashion.
+Since, many studies, particularly in the space of microfinance and developmental economics [(Banerjee, Chandrasekhar, Duflo, and Jackson)](https://economics.mit.edu/files/9070), [(Chandrasekhar and Lewis 2019)](http://stanford.edu/~arungc/CL.pdf), [(Hardy et. al)](https://arxiv.org/pdf/1904.00136.pdf) have been aimed at addressing this network dilemma in a more methodological fashion.
 
 What has yet to be developed, though, is a more general econometric framework that tackles
 this question. It seems that there is great promise in exploiting tools from probability
 and graph theory, especially in developing Monte Carlo simulations, to model the adverse effects
 of imperfect random-sampling and the subsequent violation of SUTVA. Similarly, there is room
-to explore and apply graph traversal algorithms to the challenge of recovering an unknown
+to explore and apply [graph traversal algorithms](https://www.cs.cornell.edu/courses/cs2110/2019sp/L18-GraphTraversal/L18-GraphTraversal.pdf) to the challenge of recovering an unknown
 network to bolster a conservative estimate of the effect of a graph's connectedness on
 the treatment coefficient.
 
@@ -24,5 +24,6 @@ This repository is a codebase for exploration and simulation in this general are
 ## Installation
 To use the code, clone the repository to a local directory. From the command line and in that
 directory, type: `pip install -r requirements.txt`. This will install repository-specific dependencies.
+
 From there, typing `python simulation.py` will run the main simulation functions, and yield both
 images and raw data to analyze. Further analysis is done in `analysis.py`.
