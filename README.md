@@ -32,17 +32,17 @@ images and raw data to analyze. Further analysis is done in `analysis.py`.
 The most general form of this problem can be delineated with some notation from graph
 theory. Consider the graph G that is the set of all vertices *V*, and edges *E* from such
 vertices (*G = {V, E}*). In an experimental setting, we assume that there are disjoint
-graphs for treated and untreated subjects, such that there are two independent graphs.
+graphs for treated and untreated subjects such that there are two independent graphs.
 This assumption is in line with SUTVA, but is often impossible to provide robust
 evidence. The terms vertices and nodes are used interchangeably. For each disjoint
 graph, nodes *i* and *j* are either connected by *e ⊆ E*, or unconnected. For the purposes
-of the proposed methodology, such connections are unweighted (there is not relative measure
+of the proposed methodology, such connections are unweighted (there is no relative measure
 of connectedness) and undirected.
 
 The principle investigation is whether any number of *c* edges connecting nodes in each
 of the once disjoint treatment and control graphs can be recovered by sampling *k*
 nodes and obtaining the set of edges from such nodes. In a practical setting, this procedure
-would be implemented by asking some number of subjects in each group a relation question that
+would be implemented by asking some number of subjects in each group a relational question that
 would yield a list of subjects that, for example, they interact with. In the worst case,
 a complete graph (for both treatment and control groups) would require that for each
 subject, a list of *n-1* subjects would need to be presented to them to recover the entire
@@ -66,7 +66,8 @@ also clue in help from probability theory and graph traversal to impute.
 
 ## Simulation
 For the purposes of simulating imperfect treatment caused by network SUTVA violations,
-the following variables are parameterized as such:
+the following variables are parameterized as such and are used throughout the body
+of all simulation code/dataframes:
 
 `N`: the number of observations/people in each group (treatment and control) <br />
 `S`: the number of groups <br />

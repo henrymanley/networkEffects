@@ -117,8 +117,3 @@ def distribution(data):
     data['Bias'] = data['Bias'].astype(int)
 
     return data
-
-
-if __name__ == "__main__":
-    d = simulate(S = 2, N = 100, C = 10, K = 10)
-    d = distribution(d)
