@@ -93,14 +93,12 @@ def simulate(S: int, N: int, C: int, K: int, iterations = 10):
     data = pd.DataFrame(columns = ["N", "S", "C", "K", "Bias"])
     for s in range(2, S + 1):
         for c in range(1, C + 1):
-            for n in range(50, N + 10, 10):
+            for n in range(10, N + 10, 10):
                 G = randomGraph(n, s, c)
                 for k in range(1, K + 1):
                     for i in range(1, iterations + 1):
                         paramGraph = sample(G, k)
-                        print(k)
-                        drawGraph(paramGraph)
-                        bias = not nx.is_connected(paramGraph)
+                        bias = nx.is_connected(paramGraph)
                         row = {"N": n, "S": s, "C": c, "K": k, "Bias": bias}
                         data = data.append(row, ignore_index = True)
     return data
@@ -116,10 +114,11 @@ def distribution(data):
     @param data is the aforementioned pandas dataframe- the product of simulate()
     """
     data = data.groupby(['N', 'S', 'C', 'K'])['Bias'].sum().reset_index()
+    data['Bias'] = data['Bias'].astype(int)
+
     return data
 
 
 if __name__ == "__main__":
-    d = simulate(S = 2, N = 50, C = 10, K = 10)
+    d = simulate(S = 2, N = 100, C = 10, K = 10)
     d = distribution(d)
-    print(d)
