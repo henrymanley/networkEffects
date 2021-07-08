@@ -75,7 +75,7 @@ the following variables are parameterized as such:
 
 Simulations can be conceptualized in two ways. The first and the simpler of the two, is
 assuming that you have asked the "perfect question" that allows a given subject to
-reveal all of the subjects that they "interact with". Note, how this approach is different
+reveal all of the subjects that they "interact with". Note how this approach is different
 from the second approach, which not only randomly selects subjects to question (as does
 the first approach) but also samples a list of subjects (from each group) and asks if they
 "interact with" each person on that list. In the context of simulation, this "question" is
