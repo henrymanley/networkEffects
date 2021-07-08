@@ -68,10 +68,10 @@ also clue in help from probability theory and graph traversal to impute.
 For the purposes of simulating imperfect treatment caused by network SUTVA violations,
 the following variables are parameterized as such:
 
-`N`: the number of observations/people in each group (treatment and control)
-`S`: the number of groups
-`C`: the number of edges shared between treatment and control groups
-`K`: the number of samples drawn from each group to reverse-engineer a sub-graph
+`N`: the number of observations/people in each group (treatment and control) <br />
+`S`: the number of groups <br />
+`C`: the number of edges shared between treatment and control groups <br />
+`K`: the number of samples drawn from each group to reverse-engineer a sub-graph <br />
 
 Simulations can be conceptualized in two ways. The first and the simpler of the two, is
 assuming that you have asked the "perfect question" that allows a given subject to
