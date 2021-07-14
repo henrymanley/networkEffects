@@ -26,7 +26,7 @@ This repository is a codebase for exploration and simulation in this general are
 To use the code, clone the repository to a local directory. From the command line and in that
 directory, type: `pip install -r requirements.txt`. This will install repository-specific dependencies.
 
-From there, typing `main simulation.py` will run the main the simulation function on
+From there, typing `python main.py` will run the main the simulation function on
 default parameters, and yield both images and pandas dataframes to analyze.
 
 To use or modify such simulations, instantiate an object of type `NetworkRegression`.
@@ -103,7 +103,7 @@ from the second approach, which not only randomly selects subjects to question (
 the first approach) but also samples a list of subjects (from each group) and asks if they
 "interact with" each person on that list. In the context of simulation, this "question" is
 answered for each randomly selected subject in attempt to reveal cross-graph edges or connections.
-This simulation is realized by passing the ```python simulate()``` function the `ideal_sampler`
+This simulation is realized by passing the `simulate()` function the `ideal_sampler`
 sampler.
 
 The second approach can be viewed as a negation of the first, where subjects are not asked
@@ -115,4 +115,4 @@ approach is helpful in generating quick estimations of the parameters needed to 
 any shared edges. In short, the first approach is representative of the ideal world in which
 all sampled participants yield all of the desired information with the fewest number of "questions".
 This simulation, in its most naive and computationally basic form, is realized by passing
-the ```python simulate()``` function the `base_real_sampler` sampler.
+the `simulate()` function the `base_real_sampler` sampler.
