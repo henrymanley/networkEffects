@@ -1,4 +1,5 @@
 # Simulating Biased Treatment Estimates: How Networks Complicate Things
+#### Henry Manley - The Federal Reserve Bank of Dallas, Cornell University
 
 ## Motivations
 This repository is motivated by growing questions in field of econometrics, particularly
@@ -25,8 +26,25 @@ This repository is a codebase for exploration and simulation in this general are
 To use the code, clone the repository to a local directory. From the command line and in that
 directory, type: `pip install -r requirements.txt`. This will install repository-specific dependencies.
 
-From there, typing `python simulation.py` will run the main simulation functions, and yield both
-images and raw data to analyze. Further analysis is done in `analysis.py`.
+From there, typing `main simulation.py` will run the main the simulation function on
+default parameters, and yield both images and pandas dataframes to analyze.
+
+To use or modify such simulations, instantiate an object of type `NetworkRegression`.
+To analyze results of your custom paramterization of this object, instatiate an
+object of type `Analysis`, a class that extends `NetworkRegression`.
+
+```python
+from simulation import *
+
+controller = NetworkRegression()
+d = controller.simulate(S = 2, N = 100, C = 10, K = 10, sampler = controller.ideal_sampler, iterations = 10)
+d = controller.aggregate(d)
+
+analysis = Analysis(S = 2, N = 100, C = 10, K = 10, sampler = "controller", iterations = 10)
+d = analysis.distribution(d, 10)
+d20 = d[d['N'] == 20]
+analysis.plot(d20, ['Prob', 'K', 'C'])
+```
 
 ## Theory
 The most general form of this problem can be delineated with some notation from graph
@@ -64,16 +82,20 @@ The goal of recovering such data has the possibility of being computationally co
 also clue in help from probability theory and graph traversal to impute.
 
 
-## Simulation
+## Simulation Parameters
 For the purposes of simulating imperfect treatment caused by network SUTVA violations,
 the following variables are parameterized as such and are used throughout the body
-of all simulation code/dataframes:
+of all simulation code:
 
+`G`: the graph object such that G = {V, E} <br />
 `N`: the number of observations/people in each group (treatment and control) <br />
 `S`: the number of groups <br />
 `C`: the number of edges shared between treatment and control groups <br />
-`K`: the number of samples drawn from each group to reverse-engineer a sub-graph <br />
+`K`: the number of samples drawn from each group to reverse-engineer a sub-graph G' <br />
+`Sampler`: the sampling function used to recover data about G <br />
+`I`: the number of bootstraps performed for combination of N, S, C, K, and Sampler <br />
 
+## Sampling Functions
 Simulations can be conceptualized in two ways. The first and the simpler of the two, is
 assuming that you have asked the "perfect question" that allows a given subject to
 reveal all of the subjects that they "interact with". Note how this approach is different
@@ -81,6 +103,8 @@ from the second approach, which not only randomly selects subjects to question (
 the first approach) but also samples a list of subjects (from each group) and asks if they
 "interact with" each person on that list. In the context of simulation, this "question" is
 answered for each randomly selected subject in attempt to reveal cross-graph edges or connections.
+This simulation is realized by passing the ```python simulate()``` function the `ideal_sampler`
+sampler.
 
 The second approach can be viewed as a negation of the first, where subjects are not asked
 for a comprehensive list of all people they know, but instead are presented with a list
@@ -90,3 +114,5 @@ all of the people they know is not the most reasonable of exercises. Nevertheles
 approach is helpful in generating quick estimations of the parameters needed to recover
 any shared edges. In short, the first approach is representative of the ideal world in which
 all sampled participants yield all of the desired information with the fewest number of "questions".
+This simulation, in its most naive and computationally basic form, is realized by passing
+the ```python simulate()``` function the `base_real_sampler` sampler.
