@@ -2,7 +2,7 @@
 #### Henry Manley - The Federal Reserve Bank of Dallas, Cornell University
 
 ## Motivations
-This repository is motivated by growing questions in field of econometrics, particularly
+This repository is motivated by growing questions in the field of econometrics, particularly
 surrounding how underlying networks contribute to biased treatment estimates. Consider [Miguel and Kremer 2004](https://onlinelibrary.wiley.com/doi/epdf/10.1111/j.1468-0262.2004.00481.x), which is concerned with isolating the causal effects of deworming
 programs in Kenyan schools. Such an experimental design is concerned with mitagating
 splillovers (maintaing [SUTVA](https://blogs.iq.harvard.edu/violations_of_s#:~:text=Methods%20for%20causal%20inference%2C%20in,treatments%20of%20others%20around%20him.)), but such a possibility is nearly impossible in the
@@ -13,7 +13,11 @@ to the OLS framework.
 Since, many studies, particularly in the space of microfinance and developmental economics [(Banerjee, Chandrasekhar, Duflo, and Jackson)](https://economics.mit.edu/files/9070), [(Chandrasekhar and Lewis 2019)](http://stanford.edu/~arungc/CL.pdf), [(Hardy et. al)](https://arxiv.org/pdf/1904.00136.pdf) have been aimed at addressing this network dilemma in a more methodological fashion.
 
 What has yet to be developed, though, is a more general econometric framework that tackles
-this question. It seems that there is great promise in exploiting tools from probability
+this question. The currently best available robustness check [(Burke, Bergquist, Miguel 2019)](https://academic.oup.com/qje/article-abstract/134/2/785/5266398) on SUTVA comes in the form
+of randomizing treatment, and then ex-post bootstrapping the assignment variable to test
+for changes in group means based on the inclusion of certain subjects.
+
+It seems that there is great promise in exploiting tools from probability
 and graph theory, especially in developing Monte Carlo simulations, to model the adverse effects
 of imperfect random-sampling and the subsequent violation of SUTVA. Similarly, there is room
 to explore and apply [graph traversal algorithms](https://www.cs.cornell.edu/courses/cs2110/2019sp/L18-GraphTraversal/L18-GraphTraversal.pdf) to the challenge of recovering an unknown
@@ -21,30 +25,6 @@ network to bolster a conservative estimate of the effect of a graph's connectedn
 the treatment coefficient.
 
 This repository is a codebase for exploration and simulation in this general area.
-
-## Installation
-To use the code, clone the repository to a local directory. From the command line and in that
-directory, type: `pip install -r requirements.txt`. This will install repository-specific dependencies.
-
-From there, typing `python main.py` will run the main the simulation function on
-default parameters, and yield both images and pandas dataframes to analyze.
-
-To use or modify such simulations, instantiate an object of type `NetworkRegression`.
-To analyze results of your custom paramterization of this object, instatiate an
-object of type `Analysis`, a class that extends `NetworkRegression`.
-
-```python
-from simulation import *
-
-controller = NetworkRegression()
-d = controller.simulate(S = 2, N = 100, C = 10, K = 10, sampler = controller.ideal_sampler, iterations = 10)
-d = controller.aggregate(d)
-
-analysis = Analysis(S = 2, N = 100, C = 10, K = 10, sampler = "controller", iterations = 10)
-d = analysis.distribution(d, 10)
-d20 = d[d['N'] == 20]
-analysis.plot(d20, ['Prob', 'K', 'C'])
-```
 
 ## Theory
 The most general form of this problem can be delineated with some notation from graph
@@ -95,6 +75,30 @@ of all simulation code:
 `Sampler`: the sampling function used to recover data about G <br />
 `I`: the number of bootstraps performed for combination of N, S, C, K, and Sampler <br />
 
+## Installation
+To use the code, clone the repository to a local directory. From the command line and in that
+directory, type: `pip install -r requirements.txt`. This will install repository-specific dependencies.
+
+From there, typing `python main.py` will run the main the simulation function on
+default parameters, and yield both images and pandas dataframes to analyze.
+
+To use or modify such simulations, instantiate an object of type `NetworkRegression`.
+To analyze results of your custom paramterization of this object, instatiate an
+object of type `Analysis`, a class that extends `NetworkRegression`.
+
+```python
+from simulation import *
+
+controller = NetworkRegression()
+d = controller.simulate(S = 2, N = 100, C = 10, K = 10, sampler = controller.ideal_sampler, iterations = 10)
+d = controller.aggregate(d)
+
+analysis = Analysis(S = 2, N = 100, C = 10, K = 10, sampler = "controller", iterations = 10)
+d = analysis.distribution(d, 10)
+d20 = d[d['N'] == 20]
+analysis.plot(d20, ['Prob', 'K', 'C'])
+```
+
 ## Sampling Functions
 Simulations can be conceptualized in two ways. The first and the simpler of the two, is
 assuming that you have asked the "perfect question" that allows a given subject to
@@ -110,9 +114,11 @@ The second approach can be viewed as a negation of the first, where subjects are
 for a comprehensive list of all people they know, but instead are presented with a list
 of subjects to identify connections. Note, the second approach is more similar to how
 this methodology could be intuitively implemented. Not to mention, asking a subject to list
-all of the people they know is not the most reasonable of exercises. Nevertheless, the first
+all of the people they know is not a reasonable exercise. Nevertheless, the first
 approach is helpful in generating quick estimations of the parameters needed to recover
 any shared edges. In short, the first approach is representative of the ideal world in which
 all sampled participants yield all of the desired information with the fewest number of "questions".
 This simulation, in its most naive and computationally basic form, is realized by passing
-the `simulate()` function the `base_real_sampler` sampler.
+the `simulate()` function the `base_real_sampler` sampler. The ultimate goal is
+to design an algorithmic approach, by making incremental improvements to the sampling method
+to recover the most about an unknown network in a computationally efficient way.

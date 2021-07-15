@@ -65,7 +65,8 @@ class NetworkRegression():
         This implementation assumes that for every sample of V, you perfectly retrieve all
         degree and edge information and there is no "cost" incurred by this retrieval.
         Thus, a set of v in V are randomly sampled for each s in S. Then, all edge
-        information are retrieved for each v to map out a subgraph G'.
+        information are retrieved for each v to map out a subgraph G'. This implementation
+        assumes that each group is non-disjoint.
 
         @param G is the graph object to sample and reverse engineer
         @param n is the number of nodes to sample from G
@@ -119,6 +120,30 @@ class NetworkRegression():
             if connected:
                 edges += 1
         return edges
+
+
+    def mod1_real_sampler(self, G, n: int, s: int):
+        """
+        Returns the number of edges recovered from sampling.
+
+        This implementation is the first functional improvement on the base_real_sampler.
+        In particular, this method first samples nodes withing groups to draw out
+        rough estimates of underlying graphs for each group s in S. This process
+        is done probabilistically, whereas once nodes are sampled (without replacement)
+        and are "questioned" to obtain edge information, nodes that appear to be more
+        central will have neighbors that will be excluded from this sampling.
+
+        Then, each combination of nodes between these two subgroups and tested for edges
+        between them. If there is an edge that connects them, that is indicative
+        of bias that is in fact captured by this base simulation. Else, it is possible
+        that whilst each sample was representative of their populations, there are simply
+        few edges connecting them to begin with.
+
+        @param G is the graph object to sample and reverse engineer
+        @param n is the number of nodes to sample from G
+        @param s is the number of groups
+        """
+        pass
 
 
     def simulate(self, S: int, N: int, C: int, K: int, sampler, iterations = 10):
