@@ -242,10 +242,10 @@ class Analysis(NetworkRegression):
         plt.show()
 
 
-    def distribution(self, data, iterations: int):
+    def distribution(self, data):
         """
         Given aggregated simulation statistics pandas dataframe, approximate probability
-        distribution.
+        distribution of recovering c edges.
 
         @param data is the aforementioned pandas dataframe
         @param iterations is the number of iterations each parameter combination was
@@ -256,7 +256,11 @@ class Analysis(NetworkRegression):
         the number of edges). The best way to visualize this would be to plot (Bias/K) against
         N. Do this for each C. --> will need new way to handle "recovering" at least 2, 3, ...
         """
-        data['Prob'] = data['Bias']/self.getSimParams()[4]
+        maxC = data['C'].max()
+        for c in range(1, maxC + 1):
+            data['Prob-' + str(c)] = data['Bias'][data['C'] >= c]/self.getSimParams()[4]
+
+        data = data.fillna(0)
         return data
 
 
